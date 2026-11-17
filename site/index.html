@@ -1,0 +1,10 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Visit counter</title>
+<h1 id="out">Loading...</h1>
+<script>
+  fetch("http://localhost:8082/visits")
+    .then((r) => r.json())
+    .then((d) => (out.textContent = `Visits to this page: ${d.visits}`))
+    .catch(() => (out.textContent = "The API cannot be reached"));
+</script>
