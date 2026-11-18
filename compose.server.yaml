@@ -1,22 +1,31 @@
+# On the server only, on top of compose.yaml:
+#   docker compose -f compose.yaml -f compose.server.yaml up -d --build
+#
+# Nothing publishes a port: the page and the API join the Docker network "web", where
+# the shared Caddy (repo oscarcaux7/server-proxy) finds them and serves them at
+# https://student02.wt.thomasjuldo.com/visits/. Redis stays on this project's own
+# network, out of Caddy's reach.
 services:
   site:
     ports: !reset []
     restart: unless-stopped
+    networks:
+      web:
+        aliases:
+          - visit-counter-site
+
   api:
     ports: !reset []
     restart: unless-stopped
+    networks:
+      default: {}       # to reach Redis
+      web:
+        aliases:
+          - visit-counter-api
+
   db:
     restart: unless-stopped
-  caddy:
-    image: caddy:2.11-alpine
-    restart: unless-stopped
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile:ro
-      - caddy-data:/data
-      - caddy-config:/config
-volumes:
-  caddy-data:
-  caddy-config:
+
+networks:
+  web:
+    external: true   # created once on the server: docker network create web
