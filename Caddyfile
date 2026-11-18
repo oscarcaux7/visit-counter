@@ -1,8 +1,0 @@
-student02.wt.thomasjuldo.com {
-	handle_path /api/* {
-		reverse_proxy api:8082
-	}
-	handle {
-		reverse_proxy site:80
-	}
-}

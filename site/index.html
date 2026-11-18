@@ -3,7 +3,7 @@
 <title>Visit counter</title>
 <h1 id="out">Loading...</h1>
 <script>
-  const API = location.port === "8081" ? "http://localhost:8082" : "/api";
+  const API = location.port === "8081" ? "http://localhost:8082" : "api"; // relative: /visits/api behind Caddy
     fetch(API + "/visits")
     .then((r) => r.json())
     .then((d) => (out.textContent = `Visits to this page: ${d.visits}`))
